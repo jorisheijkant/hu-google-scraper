@@ -1,0 +1,20 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "description": "a simple scraper that jsonifies google search results",
+  "main": "index.js",
+  "repository": "https://github.com/jorisheijkant/hu-google-scraper",
+  "author": "jorisheijkant <jorisheijkant@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "scrape": "node scrape.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "puppeteer": "^10.1.0",
+    "puppeteer-extra": "^3.1.18",
+    "puppeteer-extra-plugin-adblocker": "^2.11.11",
+    "puppeteer-extra-plugin-stealth": "^2.7.8"
+  }
+}
