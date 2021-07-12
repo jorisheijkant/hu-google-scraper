@@ -45,6 +45,11 @@ const googleScraper = {
         console.log(chalk.black.bgCyanBright(' Initialized, Going to —>" + BASE_URL'));
     },
 
+    end: async () => {
+        console.log('🚪 Closing browser');
+        await browser.close();
+    },
+
     agreeCookies: async() => {
         console.log('Looking for cookie button');
         const [button] = await page.$x("//div[text()='Ik ga akkoord']");
@@ -56,21 +61,87 @@ const googleScraper = {
         }
     },
 
-    searchTerm: async(term) => {
+    searchTerm: async(term, pages) => {
+        // Set path-friendly version of term
+        // TO DO: full slug function to prevent script from stalling with special characters
+        let slug = term.toLowerCase().replace(' ', '-');
+
+        // Set results variable
+        let resultsArray = [];
+
+        // Go to page and start process
         console.log('searching term', term);
         await page.goto(`${BASE_URL}/search?q=${term}`);
-        // await page.waitForTimeout(2000);
         console.log('scraping results');
 
-        //$$ works exactly as a document.querySelectorAll() would in the browser console
-        let results = await page.$x('//div[@id=\'search\']//div[@id=\'rso\']//div[@class=\'g\']');
+        for(let i = 0; i < pages; i++) {
+            console.log('Now scraping page ', i + 1);
+            let clickNext;
+            if(i < pages - 1) {
+                clickNext = true;
+            }
 
-        if(results) {
-            console.log(results.length, 'results found');
-            // console.log(results);
-        } else {
-            console.log('no results found');
+            let results = await page.$x('//div[@id=\'search\']//div[@id=\'rso\']//div[@class=\'g\']');
+
+            if(results) {
+                console.log(results.length, 'results found');
+
+                for (let result of results) {
+                    // Parse results into JSON
+                    let parsedResult = {}
+                    parsedResult.title = await result.$eval('a h3', element => element.innerText);
+                    parsedResult.urlText = await result.$eval('a cite', element => element.innerText);
+                    parsedResult.url = await result.$eval('a', element => element.href);
+
+                    resultsArray.push(parsedResult)
+                }
+
+            } else {
+                console.log('no results found');
+            }
+
+            if(clickNext) {
+                // Find next page button
+                let link = await page.$eval("#pnnext", el => {
+                    if(el) return el.href
+                });
+
+                if (link) {
+                    console.log('Next page button found, going to next page', link);
+                    // await page.waitForNavigation();
+                    // FILTER ALSO INCLUDES SIMILAR RESULTS
+                    await page.goto(`${link}&filter=0`);
+                } else {
+                    console.log('Page does not exist, index');
+                }
+            }
         }
+
+        //Set json directory and make one (including empty json file) if it does not exist
+        let json_dir = path.join(__dirname, `./json/${slug}`);
+        if (!fs.existsSync(json_dir)){
+            fs.mkdirSync(json_dir);
+            fs.writeFileSync(`${json_dir}/results.json`, JSON.stringify([]));
+            fs.chmod(`${json_dir}/results.json`, 0o777, () => {console.log('chmod set to 777')});
+        }
+
+        //write files to the system
+        fs.writeFile(`${json_dir}/results.json`, JSON.stringify(resultsArray), (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log(chalk.black.bgYellowBright('💾 The file has been saved!'));
+
+                //Fix permissions
+                fs.chmod(`${json_dir}/results.json`, 0o777, (err) => {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log('💾 chmod set to 777')
+                    }
+                });
+            }
+        });
     }
 }
 
