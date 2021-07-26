@@ -61,7 +61,7 @@ const googleScraper = {
         }
     },
 
-    searchTerm: async(term, pages) => {
+    searchTerm: async(term, pages, media) => {
         // Set path-friendly version of term
         // TO DO: full slug function to prevent script from stalling with special characters
         let slug = term.toLowerCase().replace(' ', '-');
@@ -93,7 +93,31 @@ const googleScraper = {
                     parsedResult.urlText = await result.$eval('a cite', element => element.innerText);
                     parsedResult.url = await result.$eval('a', element => element.href);
 
-                    resultsArray.push(parsedResult)
+                    let checkNews = (result) => {
+                        // console.log(`Checking result`, result.url);
+                        // Set link sub-elements
+                        let link = result.url;
+                        let isNews;
+
+                        if(link) {
+                            // Check whether this is a link to a legacy news site
+                            for (let index = 0; index < media.length; index++) {
+                                isNews = link.includes(media[index].url_pattern);
+                                if(isNews) {
+                                    console.log(link, 'is a news result!')
+                                    return true;
+                                }
+                            }
+
+                            return isNews;
+                        }
+                    }
+
+                    parsedResult.news = checkNews(parsedResult);
+
+                    if(parsedResult.news) {
+                        resultsArray.push(parsedResult);
+                    }
                 }
 
             } else {
@@ -126,6 +150,8 @@ const googleScraper = {
         }
 
         //write files to the system
+        console.log(`Total ${resultsArray.length} results, writing them to file...`);
+
         fs.writeFile(`${json_dir}/results.json`, JSON.stringify(resultsArray), (err) => {
             if (err) {
                 console.error(err);

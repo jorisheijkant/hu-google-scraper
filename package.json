@@ -8,10 +8,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "scrape": "node scrape.js"
+    "scrape": "node scrape.js",
+    "push-filters": "rsync -avz ~/documents/dev/2021/hu/scraper/filters/legacy-filters.json joris@api.jorisheijkant.nl:/var/www/html/data/hu/legacy-filters.json",
+    "push-results": "rsync -arv ~/documents/dev/2021/hu/scraper/json/ joris@api.jorisheijkant.nl:/var/www/html/data/hu/news-results"
   },
   "dependencies": {
     "chalk": "^4.1.1",
+    "node-fetch": "^2.6.1",
     "puppeteer": "^10.1.0",
     "puppeteer-extra": "^3.1.18",
     "puppeteer-extra-plugin-adblocker": "^2.11.11",
