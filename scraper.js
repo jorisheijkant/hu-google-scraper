@@ -68,6 +68,7 @@ const googleScraper = {
 
         // Set results variable
         let resultsArray = [];
+        let regularArray = [];
 
         // Go to page and start process
         console.log('searching term', term);
@@ -92,6 +93,7 @@ const googleScraper = {
                     parsedResult.title = await result.$eval('a h3', element => element.innerText);
                     parsedResult.urlText = await result.$eval('a cite', element => element.innerText);
                     parsedResult.url = await result.$eval('a', element => element.href);
+                    parsedResult.used = false;
 
                     let checkNews = (result) => {
                         // console.log(`Checking result`, result.url);
@@ -117,6 +119,8 @@ const googleScraper = {
 
                     if(parsedResult.news) {
                         resultsArray.push(parsedResult);
+                    } else {
+                        regularArray.push(parsedResult);
                     }
                 }
 
@@ -150,16 +154,35 @@ const googleScraper = {
         }
 
         //write files to the system
-        console.log(`Total ${resultsArray.length} results, writing them to file...`);
+        console.log(`Total ${resultsArray.length} news results, writing them to file...`);
 
-        fs.writeFile(`${json_dir}/results.json`, JSON.stringify(resultsArray), (err) => {
+        fs.writeFile(`${json_dir}/news-results.json`, JSON.stringify(resultsArray), (err) => {
             if (err) {
                 console.error(err);
             } else {
-                console.log(chalk.black.bgYellowBright('💾 The file has been saved!'));
+                console.log(chalk.black.bgYellowBright('💾 The news results file has been saved!'));
 
                 //Fix permissions
-                fs.chmod(`${json_dir}/results.json`, 0o777, (err) => {
+                fs.chmod(`${json_dir}/news-results.json`, 0o777, (err) => {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log('💾 chmod set to 777')
+                    }
+                });
+            }
+        });
+
+        console.log(`Total ${regularArray.length} regular results, writing them to file...`);
+
+        fs.writeFile(`${json_dir}/regular-results.json`, JSON.stringify(regularArray), (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log(chalk.black.bgYellowBright('💾 The regular results file has been saved!'));
+
+                //Fix permissions
+                fs.chmod(`${json_dir}/regular-results.json`, 0o777, (err) => {
                     if (err) {
                         console.error(err);
                     } else {
