@@ -93,6 +93,10 @@ const googleScraper = {
                     parsedResult.title = await result.$eval('a h3', element => element.innerText);
                     parsedResult.urlText = await result.$eval('a cite', element => element.innerText);
                     parsedResult.url = await result.$eval('a', element => element.href);
+                    parsedResult.text = await result.$eval(':scope > div > div > div:nth-of-type(2)', element => element.innerHTML);
+                    // let textElement = await result.$x('//div//div//div[2]//div');
+                    // console.log(textElement);
+                    // parsedResult.text = textElement.$eval('div', element => element.innerHTML);
                     parsedResult.used = false;
 
                     let checkNews = (result) => {
