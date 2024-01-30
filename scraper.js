@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer-extra');
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
+const slugify = require('./utils/slugify');
 
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker');
@@ -63,8 +64,7 @@ const googleScraper = {
 
     searchTerm: async(term, pages, media) => {
         // Set path-friendly version of term
-        // TO DO: full slug function to prevent script from stalling with special characters
-        let slug = term.toLowerCase().replace(' ', '-');
+        let slug = slugify(term);
 
         // Set results variable
         let resultsArray = [];
@@ -89,7 +89,7 @@ const googleScraper = {
 
                 for (let result of results) {
                     // Parse results into JSON
-                    let parsedResult = {}
+                    let parsedResult = {};
                     parsedResult.title = await result.$eval('a h3', element => element.innerText);
                     parsedResult.urlText = await result.$eval('a cite', element => element.innerText);
                     parsedResult.url = await result.$eval('a', element => element.href);
@@ -142,7 +142,7 @@ const googleScraper = {
                     console.log('Next page button found, going to next page', link);
                     // await page.waitForNavigation();
                     // FILTER ALSO INCLUDES SIMILAR RESULTS
-                    await page.goto(`${link}&filter=0`);
+                    await page.goto(`${link}`);
                 } else {
                     console.log('Page does not exist, index');
                 }

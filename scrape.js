@@ -19,7 +19,7 @@ async function scrape() {
     await fetchFilters();
     await scraper.initialize(true);
     await scraper.agreeCookies();
-    await scraper.searchTerm('sylvester eijffinger', 20, media);
+    await scraper.searchTerm('Peter de Knijff', 10, media);
     await scraper.end();
 }
 
