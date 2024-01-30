@@ -13,15 +13,12 @@
     "push-results": "rsync -arv ~/documents/dev/2021/hu/scraper/json/ joris@api.jorisheijkant.nl:/var/www/html/data/hu/news-results"
   },
   "dependencies": {
-    "async": "^3.2.1",
-    "chalk": "^4.1.1",
-    "commander": "^8.1.0",
-    "jq": "^1.7.2",
-    "node-fetch": "^2.6.1",
-    "puppeteer": "^10.1.0",
-    "puppeteer-extra": "^3.1.18",
-    "puppeteer-extra-plugin-adblocker": "^2.11.11",
-    "puppeteer-extra-plugin-stealth": "^2.7.8",
-    "winston": "^3.3.3"
+    "chalk": "5.3.0",
+    "commander": "11.1.0",
+    "node-fetch": "3.3.2",
+    "puppeteer": "21.10.0",
+    "puppeteer-extra": "3.3.2",
+    "puppeteer-extra-plugin-adblocker": "2.13.6",
+    "puppeteer-extra-plugin-stealth": "2.11.2"
   }
 }
