@@ -16,7 +16,7 @@
     "chalk": "5.3.0",
     "commander": "11.1.0",
     "node-fetch": "3.3.2",
-    "puppeteer": "21.10.0",
+    "puppeteer": "22.10.0",
     "puppeteer-extra": "3.3.2",
     "puppeteer-extra-plugin-adblocker": "2.13.6",
     "puppeteer-extra-plugin-stealth": "2.11.2"
