@@ -13,13 +13,13 @@
     "push-results": "rsync -arv ~/documents/dev/2021/hu/scraper/json/ joris@api.jorisheijkant.nl:/var/www/html/data/hu/news-results"
   },
   "dependencies": {
-    "chalk": "5.4.1",
-    "commander": "13.1.0",
+    "chalk": "5.6.2",
+    "commander": "14.0.2",
     "node-fetch": "3.3.2",
-    "puppeteer": "24.4.0",
+    "puppeteer": "24.35.0",
     "puppeteer-extra": "3.3.6",
     "puppeteer-extra-plugin-adblocker": "2.13.6",
     "puppeteer-extra-plugin-stealth": "2.11.2"
   },
-  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
+  "packageManager": "yarn@4.12.0"
 }
