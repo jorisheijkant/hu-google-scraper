@@ -13,10 +13,10 @@
     "push-results": "rsync -arv ~/documents/dev/2021/hu/scraper/json/ joris@api.jorisheijkant.nl:/var/www/html/data/hu/news-results"
   },
   "dependencies": {
-    "chalk": "5.6.2",
-    "commander": "14.0.2",
+    "chalk": "6.0.1",
+    "commander": "15.0.0",
     "node-fetch": "3.3.2",
-    "puppeteer": "25.1.0",
+    "puppeteer": "25.16.0",
     "puppeteer-extra": "3.3.6",
     "puppeteer-extra-plugin-adblocker": "2.13.6",
     "puppeteer-extra-plugin-stealth": "2.11.2"
