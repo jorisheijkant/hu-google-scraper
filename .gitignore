@@ -3,3 +3,6 @@ node_modules
 .idea
 /node_modules/
 .DS_Store
+.yarn/
+.yarn/*
+/.yarn/
